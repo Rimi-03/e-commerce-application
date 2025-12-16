@@ -1,5 +1,8 @@
+import 'package:ecommerce_app/controllers/auth_controller.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
+import 'package:ecommerce_app/view/signin_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -29,9 +32,13 @@ class AccountScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(children: [_buildProfileSection(context),
-        const SizedBox(height: 24),
-        _buildMenuSection(context)]),
+        child: Column(
+          children: [
+            _buildProfileSection(context),
+            const SizedBox(height: 24),
+            _buildMenuSection(context),
+          ],
+        ),
       ),
     );
   }
@@ -91,5 +98,63 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuSection(BuildContext context){}
+  Widget _buildMenuSection(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final menuItems = [
+      {'icon': Icons.shopping_bag_outlined, 'title': 'My Orders'},
+      {'icon': Icons.location_on_outlined, 'title': 'Shipping Address'},
+      {'icon': Icons.help_outline, 'title': 'Help Center'},
+      {'icon': Icons.logout_outlined, 'title': 'Logout'},
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: menuItems.map((item) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: isDark
+                      ? Colors.black.withAlpha((0.2 * 255).toInt())
+                      : Colors.grey.withAlpha((0.1 * 255).toInt()),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ListTile(
+              leading: Icon(
+                item['icon'] as IconData,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: Text(
+                item['title'] as String,
+                style: AppTextStyle.withColor(
+                  AppTextStyle.bodyMedium,
+                  Theme.of(context).textTheme.bodyLarge!.color!,
+                ),
+              ),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: isDark ? Colors.grey[400] : Colors.grey[600],
+              ),
+              onTap: () {
+                if (item['title'] == 'Logout') {
+                  //_showLogoutDialog(context);
+                } else if (item['title'] == 'My Orders') {
+                } else if (item['title'] == 'Shipping Address') {
+                } else if (item['title'] == 'Help Center') {}
+              },
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+
 }
