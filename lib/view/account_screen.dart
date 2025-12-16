@@ -144,7 +144,7 @@ class AccountScreen extends StatelessWidget {
               ),
               onTap: () {
                 if (item['title'] == 'Logout') {
-                  //_showLogoutDialog(context);
+                  _showLogoutDialog(context);
                 } else if (item['title'] == 'My Orders') {
                 } else if (item['title'] == 'Shipping Address') {
                 } else if (item['title'] == 'Help Center') {}
@@ -156,5 +156,95 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
+  void _showLogoutDialog(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 20,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withAlpha((0.1 * 255).toInt()),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.logout_rounded,
+                color: Theme.of(context).primaryColor,
+                size: 32,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Are you sure you want to logout?',
+              style: AppTextStyle.withColor(
+                AppTextStyle.bodyMedium,
+                isDark ? Colors.grey[400]! : Colors.grey[600]!,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Get.back(),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      side: BorderSide(
+                        color: isDark ? Colors.grey[700]! : Colors.grey[300]!,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Cancel',
+                      style: AppTextStyle.withColor(
+                        AppTextStyle.buttonMedium,
+                        Theme.of(context).textTheme.bodyLarge!.color!,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final AuthController authControler =
+                          Get.find<AuthController>();
+                      authControler.logout();
+                      Get.offAll(() => SigninScreen());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Logout',
+                      style: AppTextStyle.withColor(
+                        AppTextStyle.buttonMedium,
+                        Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
