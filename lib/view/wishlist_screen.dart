@@ -34,46 +34,22 @@ class WishlistScreen extends StatelessWidget {
           SliverToBoxAdapter(child: _buildSummarySection(context)),
 
           //wishlist items
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummarySection(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final favoriteProducts = products.where((p) => p.isFavorite).length;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? Colors.grey[850] : Colors.grey[100],
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '$favoriteProducts Items',
-                style: AppTextStyle.withColor(
-                  AppTextStyle.h2,
-                  Theme.of(context).textTheme.bodyLarge!.color!,
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => _buildWishlistItem(
+                  context,
+                  products.where((p) => p.isFavorite).toList()[index],
                 ),
+                childCount: products.where((p) => p.isFavorite).length,
               ),
-              const SizedBox(height: 4),
-              Text(
-                'in your wishlist',
-                style: AppTextStyle.withColor(
-                  AppTextStyle.bodyMedium,
-                  isDark ? Colors.grey[400]! : Colors.grey[600]!,
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
+
+
 }
