@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/controllers/theme_controller.dart';
 import 'package:ecommerce_app/view/widgets/category_chips.dart';
 import 'package:ecommerce_app/view/widgets/custom_search_bar.dart';
+import 'package:ecommerce_app/view/widgets/product_grid.dart';
 import 'package:ecommerce_app/view/widgets/sale_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -81,6 +82,37 @@ class HomeScreen extends StatelessWidget{
               //sale banner
               const SaleBanner(),
 
+              //popular product
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Popular Product',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Text(
+                        'See All',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              //product grid
+              const Expanded(child: ProductGrid()),
             ],
           ),
         ),
