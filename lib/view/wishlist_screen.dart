@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
 import 'package:flutter/material.dart';
 
