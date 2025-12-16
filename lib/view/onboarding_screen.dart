@@ -101,7 +101,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
-
+          Positioned(
+            bottom: 80,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Skip",
+                    style: AppTextStyle.withColor(
+                      AppTextStyle.buttonMedium,
+                      isDark ? Colors.grey[400]! : Colors.grey[600]!,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
