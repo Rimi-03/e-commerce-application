@@ -115,7 +115,7 @@ class FilterBottomSheet {
                     },
                     backgroundColor: Theme.of(context).cardColor,
                     selectedColor:
-                        Theme.of(context).primaryColor.withOpacity(0.2),
+                        Theme.of(context).primaryColor.withValues(alpha: 51),
                     labelStyle: AppTextStyle.withColor(
                       AppTextStyle.bodyMedium,
                       Theme.of(context).textTheme.bodyLarge!.color!,
