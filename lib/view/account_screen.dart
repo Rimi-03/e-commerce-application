@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'edit profile/views/screens/edit_profile_screen.dart';
+import 'help center/views/screens/help_center_screen.dart';
 
 class AccountScreen extends StatelessWidget {
 
@@ -153,7 +154,9 @@ class AccountScreen extends StatelessWidget {
                 } else if (item['title'] == 'My Orders') {
                   Get.to(() =>  MyOrdersScreen());
                 } else if (item['title'] == 'Shipping Address') {
-                } else if (item['title'] == 'Help Center') {}
+                } else if (item['title'] == 'Help Center') {
+                  Get.to(() =>  const HelpCenterScreen());
+                }
               },
             ),
           );
