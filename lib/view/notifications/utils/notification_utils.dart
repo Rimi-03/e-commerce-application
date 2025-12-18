@@ -18,7 +18,7 @@ class NotificationUtils {
   static Color getIconBackground(BuildContext context, NotificationType type) {
     switch (type) {
       case NotificationType.order:
-        return Theme.of(context).colorScheme.primary.withValues(alpha: 26);
+        return Theme.of(context).colorScheme.primary.withAlpha(26);
       case NotificationType.delivery:
         return Colors.green[100]!;
       case NotificationType.promo:
