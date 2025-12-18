@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/view/checkout/widgets/address_card.dart';
+import 'package:ecommerce_app/view/checkout/widgets/payment_method_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,10 +35,10 @@ class CheckoutScreen extends StatelessWidget {
             _buildSectionTitle(context, 'Shipping Address'),
             const SizedBox(height: 16),
             const AddressCard(),
-            //const SizedBox (height: 16),
-            //const (),
-            //const SizedBox (height: 16),
-            //const (),
+            const SizedBox (height: 24),
+            _buildSectionTitle(context, 'Payment Method'),
+            const SizedBox (height: 16),
+            const PaymentMethodCard(),
           ],
         ),
       ),
