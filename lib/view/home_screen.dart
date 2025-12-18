@@ -5,6 +5,7 @@ import 'package:ecommerce_app/view/widgets/category_chips.dart';
 import 'package:ecommerce_app/view/widgets/custom_search_bar.dart';
 import 'package:ecommerce_app/view/widgets/product_grid.dart';
 import 'package:ecommerce_app/view/widgets/sale_banner.dart';
+import 'package:ecommerce_app/view/notifications/view/notifications_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,9 +51,7 @@ class HomeScreen extends StatelessWidget{
                     Spacer(),
                     //notification icon
                     IconButton(
-                        onPressed: () => Get.to(() =>
-                        {
-                        }),
+                        onPressed: () => Get.to(() => NotificationsScreen()),
                         icon: Icon(
                             Icons.notifications_outlined
                         ),
