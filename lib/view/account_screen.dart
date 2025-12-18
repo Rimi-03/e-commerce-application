@@ -6,6 +6,8 @@ import 'package:ecommerce_app/view/my orders/view/screens/my_orders_screen.dart'
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'edit profile/views/screens/edit_profile_screen.dart';
+
 class AccountScreen extends StatelessWidget {
 
   const AccountScreen({super.key});
@@ -80,7 +82,7 @@ class AccountScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           OutlinedButton(
-            onPressed: () {},
+            onPressed: () => Get.to(() => const EditProfileScreen()),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               side: BorderSide(color: isDark ? Colors.white70 : Colors.black12),
