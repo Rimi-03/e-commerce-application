@@ -54,8 +54,8 @@ class CartScreen extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark
-                ? Colors.black.withOpacity(0.2)
-                : Colors.grey.withOpacity(0.1),
+                ? Colors.black.withAlpha((0.2 * 255).toInt())
+                : Colors.grey.withAlpha((0.1 * 255).toInt()),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -119,7 +119,7 @@ class CartScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(
                             context,
-                          ).primaryColor.withOpacity(0.1),
+                          ).primaryColor.withAlpha((0.1 * 255).toInt()),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -176,7 +176,7 @@ class CartScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.red[400]!.withOpacity(0.1),
+                color: Colors.red[400]!.withAlpha((0.1 * 255).toInt()),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -263,7 +263,7 @@ class CartScreen extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
