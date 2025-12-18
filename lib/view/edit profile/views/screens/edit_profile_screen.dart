@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../utils/app_textstyles.dart';
 import 'package:get/get.dart';
 
+import '../widgets/profile_form.dart';
+import '../widgets/profile_image.dart';
+
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
 
@@ -28,7 +31,8 @@ class EditProfileScreen extends StatelessWidget {
           children: [
             SizedBox(height: 24),
             ProfileImage(),
-
+            SizedBox(height: 32),
+            ProfileForm(),
           ],
         ),
       ),
