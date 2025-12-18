@@ -151,7 +151,7 @@ class AccountScreen extends StatelessWidget {
                 if (item['title'] == 'Logout') {
                   _showLogoutDialog(context);
                 } else if (item['title'] == 'My Orders') {
-                  Get.to(() => const MyOrdersScreen());
+                  Get.to(() =>  MyOrdersScreen());
                 } else if (item['title'] == 'Shipping Address') {
                 } else if (item['title'] == 'Help Center') {}
               },
