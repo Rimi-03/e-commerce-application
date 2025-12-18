@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../utils/app_textstyles.dart';
+import '../widgets/help_categories_section.dart';
 import '../widgets/popular_questions_section.dart';
 
 class HelpCenterScreen extends StatelessWidget {
@@ -31,6 +32,8 @@ class HelpCenterScreen extends StatelessWidget {
             _buildSearchBar(context, isDark),
             const SizedBox(height: 24),
             const PopularQuestionsSection(),
+            const SizedBox (height: 24),
+            const HelpCategoriesSection(),
           ],
         ),
       ),
