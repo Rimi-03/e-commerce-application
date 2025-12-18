@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/controllers/auth_controller.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
 import 'package:ecommerce_app/view/settings_screen.dart';
+import 'package:ecommerce_app/view/shipping%20address/shipping_address_screen.dart';
 import 'package:ecommerce_app/view/signin_screen.dart';
 import 'package:ecommerce_app/view/my orders/view/screens/my_orders_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'edit profile/views/screens/edit_profile_screen.dart';
 import 'help center/views/screens/help_center_screen.dart';
 
 class AccountScreen extends StatelessWidget {
-
   const AccountScreen({super.key});
 
   @override
@@ -29,7 +29,7 @@ class AccountScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () => Get.to(()=> const SettingsScreen()),
+            onPressed: () => Get.to(() => const SettingsScreen()),
             icon: Icon(
               Icons.settings_outlined,
               color: isDark ? Colors.white : Colors.black,
@@ -152,10 +152,11 @@ class AccountScreen extends StatelessWidget {
                 if (item['title'] == 'Logout') {
                   _showLogoutDialog(context);
                 } else if (item['title'] == 'My Orders') {
-                  Get.to(() =>  MyOrdersScreen());
+                  Get.to(() => MyOrdersScreen());
                 } else if (item['title'] == 'Shipping Address') {
+                  Get.to(() => ShippingAddressScreen());
                 } else if (item['title'] == 'Help Center') {
-                  Get.to(() =>  const HelpCenterScreen());
+                  Get.to(() => const HelpCenterScreen());
                 }
               },
             ),
@@ -182,7 +183,9 @@ class AccountScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withAlpha((0.1 * 255).toInt()),
+                color: Theme.of(
+                  context,
+                ).primaryColor.withAlpha((0.1 * 255).toInt()),
                 shape: BoxShape.circle,
               ),
               child: Icon(
