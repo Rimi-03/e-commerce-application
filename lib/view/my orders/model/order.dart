@@ -16,4 +16,6 @@ class Order {
     required this.imageUrl,
     required this.orderDate,
   });
+
+  String get statusString => status.name;
 }
