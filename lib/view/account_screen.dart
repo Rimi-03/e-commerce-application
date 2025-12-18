@@ -2,6 +2,7 @@ import 'package:ecommerce_app/controllers/auth_controller.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
 import 'package:ecommerce_app/view/settings_screen.dart';
 import 'package:ecommerce_app/view/signin_screen.dart';
+import 'package:ecommerce_app/view/my orders/view/screens/my_orders_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -148,6 +149,7 @@ class AccountScreen extends StatelessWidget {
                 if (item['title'] == 'Logout') {
                   _showLogoutDialog(context);
                 } else if (item['title'] == 'My Orders') {
+                  Get.to(() => const MyOrdersScreen());
                 } else if (item['title'] == 'Shipping Address') {
                 } else if (item['title'] == 'Help Center') {}
               },
