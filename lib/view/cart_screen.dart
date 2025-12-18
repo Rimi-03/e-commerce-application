@@ -37,6 +37,7 @@ class CartScreen extends StatelessWidget {
                   _buildCartItem(context, products[index]),
             ),
           ),
+          _buildCartSummary(context),
         ],
       ),
     );
@@ -251,6 +252,68 @@ class CartScreen extends StatelessWidget {
         ),
       ),
       barrierColor: Colors.black54,
+    );
+  }
+
+  Widget _buildCartSummary(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Total(4 items)',
+                style: AppTextStyle.withColor(
+                  AppTextStyle.bodyMedium,
+                  Theme.of(context).textTheme.bodyLarge!.color!,
+                ),
+              ),
+              Text(
+                '\$599.99',
+                style: AppTextStyle.withColor(
+                  AppTextStyle.h2,
+                  Theme.of(context).primaryColor,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'Proceed to Checkout',
+                style: AppTextStyle.withColor(
+                  AppTextStyle.buttonMedium,
+                  Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
