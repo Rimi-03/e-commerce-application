@@ -44,15 +44,23 @@ final List<Product> products = [
     oldPrice: 189.00,
     imageUrl: 'assets/images/shoe2.jpg',
     description: 'This is a description of product 3',
+<<<<<<< HEAD
     isFavorite: true,
+=======
+>>>>>>> main
   ),
   const Product(
     name: 'Puma',
     category: 'Footwear',
     price: 69.00,
     oldPrice: 189.00,
+<<<<<<< HEAD
     imageUrl: 'assets/images/shoe2.jpg',
     description: 'This is a description of product 4',
     isFavorite: true,
+=======
+    imageUrl: 'assets/images/shoes2.jpg',
+    description: 'This is a description of product 4',
+>>>>>>> main
   ),
 ];
