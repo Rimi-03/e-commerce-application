@@ -10,7 +10,7 @@ class QuestionCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
-   });
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -70,34 +70,77 @@ class QuestionCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                    child: Text(question,
-                      style: AppTextStyle.withColor(
-                        AppTextStyle.bodyMedium,
-                        Theme.of(context).textTheme.bodyLarge!.color!,
-                      ),
+                  child: Text(question,
+                    style: AppTextStyle.withColor(
+                      AppTextStyle.bodyMedium,
+                      Theme.of(context).textTheme.bodyLarge!.color!,
                     ),
+                  ),
                 ),
                 IconButton(
-                    onPressed: () => Get.back(),
-                    icon: Icon(
-                      Icons.close,
-                      color: isDark ? Colors.white : Colors.black,
-                    ),
+                  onPressed: () => Get.back(),
+                  icon: Icon(
+                    Icons.close,
+                    color: isDark ? Colors.white : Colors.black,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 24),
             Text(
-              'questions',
+              _getAnswer(question),
               style: AppTextStyle.withColor(
                 AppTextStyle.bodyMedium,
                 isDark ? Colors.grey [400]! : Colors.grey [600]!,
               ),
             ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Get.back(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'Got it!',
+                  style: AppTextStyle.withColor(
+                    AppTextStyle.buttonMedium,
+                    Colors.white,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
+  String _getAnswer(String question){
+    final answers = {
+      'How to track my order?': 'To track your order:\n\n'
+          '1. Go to "My Orders" in your account\n'
+          '2. Select the order you want to track\n'
+          '3. Click on "Track Order"\n'
+          '4. You\'ll see real time updates about your package location\n\n'
+          'You can also click on the tracking number in your order confirmation email to track your package directly.',
+      'How to return an item?': 'To return an item:\n\n'
+          '1. Go to "My Orders" in your account\n'
+          '2. Select the order with the item you want to return\n'
+          '3. Click on "Return Item"\n'
+          '4. Select the reason for return\n'
+          '5. Print the return label\n'
+          '6. Pack the item securely\n'
+          '7. Drop off the package at the nearest shipping location\n\n'
+          'Returns must be initiated within 30 days of delivery. Once we receive the item, your refund will be processed within 5-7 business days.',
+    };
 
+    return answers[question] ?? 'Information not available. PLease contact support for assistance.';
+  }
 }
