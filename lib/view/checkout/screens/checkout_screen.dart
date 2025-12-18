@@ -1,10 +1,56 @@
+import 'package:ecommerce_app/view/checkout/widgets/address_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../utils/app_textstyles.dart';
 
 class CheckoutScreen extends StatelessWidget {
   const CheckoutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: ()=>Get.back,
+          icon: Icon(Icons.arrow_back_ios),
+          color: isDark ? Colors.white: Colors.black,
+        ),
+        title: Text(
+          'Checkout',
+          style: AppTextStyle.withColor(
+            AppTextStyle.h3,
+            isDark ? Colors.white: Colors.black,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSectionTitle(context, 'Shipping Address'),
+            const SizedBox(height: 16),
+            const AddressCard(),
+            //const SizedBox (height: 16),
+            //const (),
+            //const SizedBox (height: 16),
+            //const (),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title){
+    return Text(
+      title,
+      style: AppTextStyle.withColor(
+        AppTextStyle.h3,
+        Theme.of(context).textTheme.bodyLarge!.color!,
+      ),
+    );
   }
 }
