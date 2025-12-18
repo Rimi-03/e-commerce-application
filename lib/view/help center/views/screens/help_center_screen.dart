@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/view/help%20center/views/widgets/contact_support_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../utils/app_textstyles.dart';
@@ -34,6 +35,8 @@ class HelpCenterScreen extends StatelessWidget {
             const PopularQuestionsSection(),
             const SizedBox (height: 24),
             const HelpCategoriesSection(),
+            const SizedBox (height: 24),
+            const ContactSupportSection(),
           ],
         ),
       ),
