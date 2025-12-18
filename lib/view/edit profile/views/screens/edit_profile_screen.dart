@@ -27,6 +27,8 @@ class EditProfileScreen extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 24),
+            ProfileImage(),
+
           ],
         ),
       ),
