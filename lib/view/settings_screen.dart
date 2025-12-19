@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/controllers/theme_controller.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
+import 'package:ecommerce_app/view/privacy%20policy/views/screens/privacy_policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -52,6 +53,7 @@ class SettingsScreen extends StatelessWidget {
                 'Privacy Policy',
                 'View our privacy policy',
                 Icons.privacy_tip_outlined,
+                onTap: () => Get.to(() => PrivacyPolicyScreen()),
               ),
               _buildNavigationTile(
                 context,
@@ -191,9 +193,11 @@ class SettingsScreen extends StatelessWidget {
     BuildContext context,
     String title,
     String subtitle,
-    IconData icon,
-  ) {
+    IconData icon, {
+    VoidCallback? onTap,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -229,7 +233,7 @@ class SettingsScreen extends StatelessWidget {
           Icons.chevron_right,
           color: isDark ? Colors.grey[400] : Colors.grey[600],
         ),
-        onTap: () {},
+        onTap: onTap,
       ),
     );
   }
