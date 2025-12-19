@@ -235,6 +235,7 @@ class SettingsScreen extends StatelessWidget {
           Icons.chevron_right,
           color: isDark ? Colors.grey[400] : Colors.grey[600],
         ),
+        onTap: onTap,
       ),
     );
   }
