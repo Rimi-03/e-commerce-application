@@ -60,6 +60,7 @@ class SettingsScreen extends StatelessWidget {
                 'Terms of Service',
                 'Read our terms of services',
                 Icons.description_outlined,
+
               ),
             ]),
 
@@ -233,7 +234,6 @@ class SettingsScreen extends StatelessWidget {
           Icons.chevron_right,
           color: isDark ? Colors.grey[400] : Colors.grey[600],
         ),
-        onTap: onTap,
       ),
     );
   }
