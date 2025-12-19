@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/controllers/theme_controller.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
 import 'package:ecommerce_app/view/privacy%20policy/views/screens/privacy_policy_screen.dart';
+import 'package:ecommerce_app/view/terms%20of%20service/view/screens/terms_of_service_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -53,14 +54,14 @@ class SettingsScreen extends StatelessWidget {
                 'Privacy Policy',
                 'View our privacy policy',
                 Icons.privacy_tip_outlined,
-                onTap: () => Get.to(() => PrivacyPolicyScreen()),
+                onTap: () => Get.to(() => const PrivacyPolicyScreen()),
               ),
               _buildNavigationTile(
                 context,
                 'Terms of Service',
                 'Read our terms of services',
                 Icons.description_outlined,
-
+                onTap: () => Get.to(() => const TermsOfServiceScreen()),
               ),
             ]),
 
