@@ -53,7 +53,7 @@ class OrderSummaryCard extends StatelessWidget {
           style: AppTextStyle.withColor(textStyle, color),
         ),
         Text(
-          label,
+          value,
           style: AppTextStyle.withColor(textStyle, color),
         ),
       ],
