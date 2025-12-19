@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/app_textstyles.dart';
+import '../../order confirmation/screens/order_confirmation_screen.dart';
+import '../widgets/checkout_bottom_bar.dart';
 
 class CheckoutScreen extends StatelessWidget {
   const CheckoutScreen({super.key});
@@ -46,6 +48,14 @@ class CheckoutScreen extends StatelessWidget {
             const OrderSummaryCard(),
           ],
         ),
+      ),
+      bottomNavigationBar: CheckoutBottomBar(
+        totalAmount: 662.23,
+        onPlaceOrder: (){
+          //orderNumber would come from backend
+          final orderNumber = 'ORD${DateTime.now()..millisecondsSinceEpoch.toString().substring(7)}';
+          Get.to(() => const OrderConfirmationScreen());
+        },
       ),
     );
   }
