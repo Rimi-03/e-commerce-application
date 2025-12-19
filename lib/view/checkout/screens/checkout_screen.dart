@@ -3,7 +3,6 @@ import 'package:ecommerce_app/view/checkout/widgets/order_summary_card.dart';
 import 'package:ecommerce_app/view/checkout/widgets/payment_method_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../utils/app_textstyles.dart';
 import '../../order confirmation/screens/order_confirmation_screen.dart';
 import '../widgets/checkout_bottom_bar.dart';
@@ -54,7 +53,10 @@ class CheckoutScreen extends StatelessWidget {
         onPlaceOrder: (){
           //orderNumber would come from backend
           final orderNumber = 'ORD${DateTime.now()..millisecondsSinceEpoch.toString().substring(7)}';
-          Get.to(() => const OrderConfirmationScreen());
+          Get.to(() => OrderConfirmationScreen(
+            orderNumber: orderNumber,
+            totalAmount: 662.23 ,
+          ));
         },
       ),
     );
