@@ -4,6 +4,8 @@ import 'package:ecommerce_app/view/widgets/custom_textfield.dart'
     show CustomTextfield;
 import 'package:get/get.dart';
 
+import '../controllers/auth_controller.dart';
+
 class ForgotPasswordScreen extends StatelessWidget {
   ForgotPasswordScreen({super.key});
 
@@ -69,11 +71,7 @@ class ForgotPasswordScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: ()
-                      {
-                    // Implement send reset link functionality here
-                    _showSuccessDialog(context);
-                  },
+                  onPressed: _handleSendRestLink,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
                     padding: EdgeInsets.symmetric(vertical: 16),
@@ -97,8 +95,77 @@ class ForgotPasswordScreen extends StatelessWidget {
     );
   }
 
+  //Handle send rest link
+  void _handleSendRestLink() async{
+    //Validate email input
+    if (_emailController.text.trim().isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Please enter your email',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+
+      return;
+    }
+
+    if (!GetUtils.isEmail(_emailController.text.trim())) {
+      Get.snackbar(
+        'Error',
+        'Please enter a valid email address',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+
+      return;
+    }
+
+    final AuthController authController = Get.find<AuthController>();
+
+    // Show loading indicator
+    Get.dialog(
+      const Center(
+        child: CircularProgressIndicator(),
+      ),
+      barrierDismissible: false,
+    );
+
+    try {
+      final result = await authController.sendPasswordResetEmail(
+          email: _emailController.text.trim(),
+      );
+
+      //close loading dialog
+      Get.back();
+
+      if (result.success) {
+        showSuccessDialog(Get.context!);
+      } else {
+        Get.snackbar(
+          'Error',
+          result.message,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch(e){
+      //close loading dialog
+      Get.back();
+      Get.snackbar(
+        'Error',
+        'An unexpected error occurred. Please try again',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   // show success dialog
-  void _showSuccessDialog(BuildContext context) { 
+  void showSuccessDialog(BuildContext context) {
     Get.dialog(
       AlertDialog(
         title: Text(
@@ -106,7 +173,7 @@ class ForgotPasswordScreen extends StatelessWidget {
           style: AppTextStyle.h3,
         ),
         content: Text(
-          'We have sent passeord recovery instructions to your email.',
+          'We have sent password recovery instructions to your email.',
           style: AppTextStyle.bodyMedium,
         ),
         actions: [

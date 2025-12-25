@@ -28,7 +28,7 @@ class FirebaseAuthService{
 
       // Create user document in Firestore and wait for completion
       if (result.user != null) {
-        final firestoreSuccess = await FireStoreService.createUserDocument(
+        final firestoreSuccess = await FirestoreService.createUserDocument(
           uid: result.user!.uid, email: email, name: name);
 
         if (!firestoreSuccess) {
