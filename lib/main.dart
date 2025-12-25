@@ -1,13 +1,19 @@
 import 'package:ecommerce_app/controllers/auth_controller.dart';
 import 'package:ecommerce_app/controllers/navigation_controller.dart';
 import 'package:ecommerce_app/controllers/theme_controller.dart';
+import 'package:ecommerce_app/firebase_options.dart';
 import 'package:ecommerce_app/utils/app_themes.dart';
 import 'package:ecommerce_app/view/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await GetStorage.init();
   Get.put(ThemeController());
   Get.put(AuthController());
