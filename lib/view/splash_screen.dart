@@ -5,29 +5,44 @@ import 'package:ecommerce_app/view/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SplashScreen extends StatelessWidget{
+class SplashScreen extends StatefulWidget{
   SplashScreen({super.key});
 
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
   final AuthController authController = Get.find<AuthController>();
 
   @override
-  Widget build(BuildContext context) {
-    //navigate based on auth state
-  Future.delayed(const Duration(milliseconds: 2500), (){
-    if(authController.isFirstTime){
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
+
+  void _initializeApp() async {
+    // Wait for Firebase auth state to be determined
+    await Future.delayed(const Duration(milliseconds: 2500));
+
+    // Navigate based on auth state
+    if (authController.isFirstTime) {
       Get.off(() => const OnboardingScreen());
-    }else if(authController.isLoggedIn){
+    } else if (authController.isLoggedIn) {
       Get.off(() => const MainScreen());
-    }else{
-      Get.off(() => SigninScreen());
+    } else {
+      Get.off(() => SignInScreen());
     }
-  });
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
    return Scaffold(
      body: Container(
        decoration: BoxDecoration(
          gradient: LinearGradient(
-           begin: Alignment.topLeft, 
+           begin: Alignment.topLeft,
            end: Alignment.bottomRight,
            colors: [
              Theme.of(context).primaryColor,

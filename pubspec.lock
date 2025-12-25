@@ -40,7 +40,7 @@ packages:
       sha256: f71061c654a3380576a52b451dd5532377954cf9dbd272a78fc8479606670803
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.0"
   clock:
     dependency: transitive
     description:
@@ -295,7 +295,7 @@ packages:
       sha256: dc58c723c3c24bf8d3e2d3ad3f2f9d7bd9cf43ec6feaa64181775e60190153f2
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.18"
+    version: "0.12.17"
   material_color_utilities:
     dependency: transitive
     description:
@@ -303,7 +303,7 @@ packages:
       sha256: f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.0"
+    version: "0.11.1"
   meta:
     dependency: transitive
     description:
@@ -311,7 +311,7 @@ packages:
       sha256: e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.0"
+    version: "1.16.0"
   mime:
     dependency: transitive
     description:
@@ -468,7 +468,7 @@ packages:
       sha256: "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.8"
+    version: "0.7.6"
   typed_data:
     dependency: transitive
     description:

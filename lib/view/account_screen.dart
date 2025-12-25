@@ -229,11 +229,53 @@ class AccountScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       final AuthController authControler =
-                          Get.find<AuthController>();
-                      authControler.logout();
-                      Get.offAll(() => SigninScreen());
+                        Get.find<AuthController>();
+
+                      //show loading indicator
+                      Get.dialog(
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        barrierDismissible: false,
+                      );
+
+                      try{
+                        final result =  await authControler.signOut();
+
+                        //closing loading dialog
+                        Get.back();
+
+                        if(result.success){
+                          Get.snackbar(
+                            'Success',
+                            result.message,
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.green,
+                            colorText: Colors.white,
+                          );
+                          Get.offAll(() => SignInScreen());
+                        } else {
+                          Get.snackbar(
+                            'Error',
+                            result.message,
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        }
+                      } catch(e){
+                        //closing loading dialog
+                        Get.back();
+                        Get.snackbar(
+                          'Error',
+                          'An Unexpected error occurred. Please try again.',
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,

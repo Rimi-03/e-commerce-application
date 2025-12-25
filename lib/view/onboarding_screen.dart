@@ -38,7 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _handleGetStarted() {
     final AuthController authController = Get.find<AuthController>();
     authController.setFirstTimeDone();
-    Get.off(() => SigninScreen());
+    Get.off(() => SignInScreen());
   }
 
   @override
