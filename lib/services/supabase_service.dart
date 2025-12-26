@@ -27,6 +27,7 @@ class SupabaseService {
         password: password,
         data: {'full_name': fullName},
       );
+
       return response;
     } catch (e) {
       rethrow;
@@ -64,27 +65,6 @@ class SupabaseService {
 
   // ============ USER PROFILE ============
 
-  /// Create user profile
-  Future<void> createUserProfile({
-    required String userId,
-    required String fullName,
-  }) async {
-    try {
-      final userEmail = currentUser?.email;
-      if (userEmail == null) throw Exception('User email not found');
-
-      await client.from('users').insert({
-        'id': userId,
-        'full_name': fullName,
-        'email': userEmail,
-      });
-      print('[v0] User profile created successfully in users table');
-    } catch (e) {
-      print('[v0] Error creating user profile: $e');
-      rethrow;
-    }
-  }
-
   /// Get user profile
   Future<Map<String, dynamic>?> getUserProfile(String userId) async {
     try {
@@ -94,6 +74,25 @@ class SupabaseService {
           .eq('id', userId)
           .single();
       return response as Map<String, dynamic>?;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Update user profile
+  Future<void> updateUserProfile({
+    required String userId,
+    required String fullName,
+    String? phone,
+    String? address,
+  }) async {
+    try {
+      await client.from('users').update({
+        'full_name': fullName,
+        if (phone != null) 'phone': phone,
+        if (address != null) 'address': address,
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', userId);
     } catch (e) {
       rethrow;
     }
@@ -214,7 +213,7 @@ class SupabaseService {
     }
   }
 
-  /// Clear entire cart
+  /// Clear clear cart
   Future<void> clearCart() async {
     try {
       final userId = currentUser?.id;
@@ -278,6 +277,56 @@ class SupabaseService {
           .from('orders')
           .update({'status': status})
           .eq('id', orderId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // ============ WISHLIST ============
+
+  /// Add to wishlist
+  Future<void> addToWishlist(int productId) async {
+    try {
+      final userId = currentUser?.id;
+      if (userId == null) throw Exception('User not logged in');
+
+      await client.from('wishlist').insert({
+        'user_id': userId,
+        'product_id': productId,
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Remove from wishlist
+  Future<void> removeFromWishlist(int productId) async {
+    try {
+      final userId = currentUser?.id;
+      if (userId == null) throw Exception('User not logged in');
+
+      await client
+          .from('wishlist')
+          .delete()
+          .eq('user_id', userId)
+          .eq('product_id', productId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Get wishlist
+  Future<List<Map<String, dynamic>>> getWishlist() async {
+    try {
+      final userId = currentUser?.id;
+      if (userId == null) throw Exception('User not logged in');
+
+      final response = await client
+          .from('wishlist')
+          .select('*, products(*)')
+          .eq('user_id', userId);
+
+      return List<Map<String, dynamic>>.from(response);
     } catch (e) {
       rethrow;
     }

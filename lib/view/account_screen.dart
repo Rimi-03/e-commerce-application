@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/controllers/auth_controller.dart';
+import 'package:ecommerce_app/controllers/user_controller.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
 import 'package:ecommerce_app/view/settings_screen.dart';
 import 'package:ecommerce_app/view/shipping%20address/shipping_address_screen.dart';
@@ -17,6 +18,7 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final UserController userController = Get.put(UserController());
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +42,7 @@ class AccountScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildProfileSection(context),
+            _buildProfileSection(context, userController),
             const SizedBox(height: 24),
             _buildMenuSection(context),
           ],
@@ -49,7 +51,7 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileSection(BuildContext context) {
+  Widget _buildProfileSection(BuildContext context, UserController userController) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -66,21 +68,27 @@ class AccountScreen extends StatelessWidget {
             backgroundImage: AssetImage('assets/images/avatar.jpg'),
           ),
           const SizedBox(height: 16),
-          Text(
-            'Alex Johnson',
-            style: AppTextStyle.withColor(
-              AppTextStyle.h2,
-              Theme.of(context).textTheme.bodyLarge!.color!,
-            ),
-          ),
+          Obx(() {
+            final profile = userController.userProfile.value;
+            return Text(
+              profile?['full_name'] ?? 'User',
+              style: AppTextStyle.withColor(
+                AppTextStyle.h2,
+                Theme.of(context).textTheme.bodyLarge!.color!,
+              ),
+            );
+          }),
           const SizedBox(height: 4),
-          Text(
-            'alexjohnson@gmail.com',
-            style: AppTextStyle.withColor(
-              AppTextStyle.bodyMedium,
-              isDark ? Colors.grey[400]! : Colors.grey[600]!,
-            ),
-          ),
+          Obx(() {
+            final profile = userController.userProfile.value;
+            return Text(
+              profile?['email'] ?? 'No email',
+              style: AppTextStyle.withColor(
+                AppTextStyle.bodyMedium,
+                isDark ? Colors.grey[400]! : Colors.grey[600]!,
+              ),
+            );
+          }),
           const SizedBox(height: 16),
           OutlinedButton(
             onPressed: () => Get.to(() => const EditProfileScreen()),
@@ -231,7 +239,7 @@ class AccountScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       final AuthController authControler =
-                          Get.find<AuthController>();
+                      Get.find<AuthController>();
                       authControler.logout();
                       Get.offAll(() => SigninScreen());
                     },
