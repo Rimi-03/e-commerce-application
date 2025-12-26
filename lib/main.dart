@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       darkTheme: AppThemes.dark,
       themeMode: themeController.theme,
       defaultTransition: Transition.fade,
-      home: const TestSupabaseScreen(),
+      home: SplashScreen(),
       //home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

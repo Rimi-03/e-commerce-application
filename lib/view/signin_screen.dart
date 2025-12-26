@@ -145,10 +145,31 @@ class SigninScreen extends StatelessWidget {
   }
 
   // sign in button onpressed
-  void _handleSignIn() {
+  Future<void> _handleSignIn() async {
     final AuthController authController = Get.find<AuthController>();
-    authController.login();
-    Get.offAll(() => const MainScreen());
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Email and password are required',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    try {
+      await authController.login(
+        email: email,
+        password: password,
+      );
+
+      Get.offAll(() => const MainScreen());
+    } catch (_) {
+      // Error already handled in AuthController
+    }
   }
 
 }

@@ -1,38 +1,77 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import '../services/supabase_service.dart';
 
-class AuthController extends GetxController{
-  final _storage = GetStorage();
+class AuthController extends GetxController {
+  final SupabaseService _supabaseService = SupabaseService();
+  final GetStorage _storage = GetStorage();
 
-  final RxBool _isFirstTime = true.obs;
-  final RxBool _isLoggedIn = false.obs;
+  static const String _firstTimeKey = 'is_first_time';
 
-  bool get isFirstTime => _isFirstTime.value;
-  bool get isLoggedIn => _isLoggedIn.value;
+  // ================= ONBOARDING =================
 
-  @override
-  void onInit(){
-    super.onInit();
-    _loadInitialState();
+  bool get isFirstTime {
+    return _storage.read(_firstTimeKey) ?? true;
   }
 
-  void _loadInitialState(){
-    _isFirstTime.value = _storage.read('isFirstTime')?? true;
-    _isLoggedIn.value = _storage.read('isLoggedIn')?? false;
+  void setFirstTimeDone() {
+    _storage.write(_firstTimeKey, false);
   }
 
-  void setFirstTimeDone(){
-    _isFirstTime.value = false;
-    _storage.write('isFirstTime', false);
+  // ================= AUTH =================
+  Future<void> signup({
+    required String fullName,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _supabaseService.signUp(
+        email: email,
+        password: password,
+        fullName: fullName,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Sign Up Failed',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      rethrow;
+    }
   }
 
-  void login(){
-    _isLoggedIn.value = true;
-    _storage.write('isLoggedIn', true);
+  bool get isLoggedIn {
+    return _supabaseService.isLoggedIn();
   }
 
-  void logout(){
-    _isLoggedIn.value = false;
-    _storage.write('isLoggedIn', false);
+  Future<void> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _supabaseService.signIn(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Login Failed',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await _supabaseService.signOut();
+    } catch (e) {
+      Get.snackbar(
+        'Logout Failed',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 }
