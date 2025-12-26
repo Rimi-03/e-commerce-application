@@ -1,9 +1,7 @@
 import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/view/widgets/size_selector.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-
 import '../utils/app_textstyles.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
@@ -70,13 +68,9 @@ class ProductDetailsScreen extends StatelessWidget {
                 Positioned(
                   child: IconButton(
                     onPressed: (){},
-                    icon: Icon(
-                      product.isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: product.isFavorite
-                          ? Theme.of(context).primaryColor
-                          : (isDark ? Colors.white : Colors.black),
+                    icon: const Icon(
+                      Icons.favorite_border,
+                      color: Colors.white,
                     ),
                   ),
                 ),
