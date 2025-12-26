@@ -6,7 +6,6 @@ import 'package:ecommerce_app/view/signin_screen.dart';
 import 'package:ecommerce_app/view/my orders/view/screens/my_orders_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'edit profile/views/screens/edit_profile_screen.dart';
 import 'help center/views/screens/help_center_screen.dart';
 
@@ -51,6 +50,7 @@ class AccountScreen extends StatelessWidget {
 
   Widget _buildProfileSection(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final AuthController authController = Get.find<AuthController>();
 
     return Container(
       width: double.infinity,
@@ -66,19 +66,23 @@ class AccountScreen extends StatelessWidget {
             backgroundImage: AssetImage('assets/images/avatar.jpg'),
           ),
           const SizedBox(height: 16),
-          Text(
-            'Alex Johnson',
-            style: AppTextStyle.withColor(
-              AppTextStyle.h2,
-              Theme.of(context).textTheme.bodyLarge!.color!,
+          Obx(
+            () => Text(
+              authController.userName ?? "User",
+              style: AppTextStyle.withColor(
+                AppTextStyle.h2,
+                Theme.of(context).textTheme.bodyLarge!.color!,
+              ),
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            'alexjohnson@gmail.com',
-            style: AppTextStyle.withColor(
-              AppTextStyle.bodyMedium,
-              isDark ? Colors.grey[400]! : Colors.grey[600]!,
+          Obx(
+            () => Text(
+              authController.userEmail ?? "",
+              style: AppTextStyle.withColor(
+                AppTextStyle.bodyMedium,
+                isDark ? Colors.grey[400]! : Colors.grey[600]!,
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -231,23 +235,21 @@ class AccountScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       final AuthController authControler =
-                        Get.find<AuthController>();
+                          Get.find<AuthController>();
 
                       //show loading indicator
                       Get.dialog(
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                        const Center(child: CircularProgressIndicator()),
                         barrierDismissible: false,
                       );
 
-                      try{
-                        final result =  await authControler.signOut();
+                      try {
+                        final result = await authControler.signOut();
 
                         //closing loading dialog
                         Get.back();
 
-                        if(result.success){
+                        if (result.success) {
                           Get.snackbar(
                             'Success',
                             result.message,
@@ -265,7 +267,7 @@ class AccountScreen extends StatelessWidget {
                             colorText: Colors.white,
                           );
                         }
-                      } catch(e){
+                      } catch (e) {
                         //closing loading dialog
                         Get.back();
                         Get.snackbar(
