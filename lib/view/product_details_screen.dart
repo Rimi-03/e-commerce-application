@@ -223,16 +223,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     ),
                   SizedBox(height: screenHeight * 0.02),
-                  Text(
-                    'Select Size',
-                    style: AppTextStyle.withColor(
-                      AppTextStyle.labelMedium,
-                      Theme.of(context).textTheme.bodyLarge!.color!,
+                  if (_getAvailableSizes ().isNotEmpty) ... [
+                    Text(
+                      'Select Size',
+                      style: AppTextStyle.withColor(
+                        AppTextStyle.labelMedium,
+                        Theme.of(context).textTheme.bodyLarge!.color!,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: screenHeight * 0.01),
-                  //size selector
-                  const SizeSelector(),
+                    SizedBox(height: screenHeight * 0.01),
+                    //size selector with product sizes
+                    SizeSelector(),
+                    SizedBox(height: screenHeight * 0.02),
+                  ],
+
                   SizedBox(height: screenHeight * 0.02),
                   Text(
                     'Description',
@@ -305,6 +309,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
       ),
     );
+  }
+
+  List<String> _getAvailableSizes() {
+    if (widget.product.specifications.containsKey('sizes')) {
+      final sizes = widget.product.specifications['sizes'];
+      if (sizes is List) {
+        return List<String>.from(sizes);
+      }
+    }
+
+    return []; //if size not specified
   }
 
   //share product
