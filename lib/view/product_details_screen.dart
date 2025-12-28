@@ -233,7 +233,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     SizedBox(height: screenHeight * 0.01),
                     //size selector with product sizes
-                    SizeSelector(),
+                    SizeSelector(
+                      sizes: _getAvailableSizes(),
+                      onSizeSelected: (size){
+                        //handle size selection
+                        //logic for size selection
+                      },
+                    ),
                     SizedBox(height: screenHeight * 0.02),
                   ],
 
