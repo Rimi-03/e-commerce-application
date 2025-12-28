@@ -10,7 +10,7 @@ class FirestoreService {
     required String uid,
     required String email,
     required String name,
-  }) async {
+  }) async {g
     try {
       final userData = {
         'uid': uid,
@@ -118,9 +118,13 @@ class FirestoreService {
         updateData['profileImageUrl'] = profileImageUrl;
       }
 
-      await _firestore.collection(_usersCollection).doc(uid).update(updateData);
+      //use set with merge to handle both create and update scenario
+      await _firestore.collection(_usersCollection).doc(uid).set(updateData,
+        SetOptions(merge: true),
+      );
       return true;
     } catch (e) {
+      print('Error while updating user data: $e');
       return false;
     }
   }
