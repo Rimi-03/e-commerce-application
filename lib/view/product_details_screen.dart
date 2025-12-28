@@ -139,42 +139,65 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   widget.product.price) ...[
                             Text(
                               '\$${widget.product.oldPrice!.toStringAsFixed(2)}',
-                              style: AppTextStyle.withColor(
-                                AppTextStyle.bodySmall,
-                                isDark ? Colors.grey[400]! : Colors.grey[600]!,
-                              ).copyWith(
-                                decoration: TextDecoration.lineThrough
-                              ),
+                              style:
+                                  AppTextStyle.withColor(
+                                    AppTextStyle.bodySmall,
+                                    isDark
+                                        ? Colors.grey[400]!
+                                        : Colors.grey[600]!,
+                                  ).copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 2
+                                horizontal: 6,
+                                vertical: 2,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.red,
                                 borderRadius: BorderRadius.circular(4),
-
                               ),
                               child: Text(
                                 '${widget.product.discountPercentage}% OFF',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ],
                       ),
                     ],
                   ),
-                  Text(
-                    widget.product.category,
-                    style: AppTextStyle.withColor(
-                      AppTextStyle.bodyMedium,
-                      isDark ? Colors.grey[400]! : Colors.grey[600]!,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        widget.product.category,
+                        style: AppTextStyle.withColor(
+                          AppTextStyle.bodyMedium,
+                          isDark ? Colors.grey[400]! : Colors.grey[600]!,
+                        ),
+                      ),
+                      if (widget.product.brand != null) ...[
+                        Text(
+                          ' . ',
+                          style: AppTextStyle.withColor(
+                            AppTextStyle.bodyMedium,
+                            isDark ? Colors.grey[400]! : Colors.grey[600]!,
+                          ),
+                        ),
+                        Text(
+                          ' . ',
+                          style: AppTextStyle.withColor(
+                            AppTextStyle.bodyMedium,
+                            Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   SizedBox(height: screenHeight * 0.02),
                   Text(
