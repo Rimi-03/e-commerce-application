@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/models/category.dart';
 
-class CategoryFireStoreService {
+class CategoryFirestoreService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String _categoriesCollection = 'categories';
 
