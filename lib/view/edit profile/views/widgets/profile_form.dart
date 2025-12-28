@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../utils/app_textstyles.dart';
 
-class ProfileForm extends StatelessWidget {
+class ProfileForm extends StatefulWidget {
   const ProfileForm({super.key});
 
+  @override
+  State<ProfileForm> createState() => _ProfileFormState();
+}
+
+class _ProfileFormState extends State<ProfileForm> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
