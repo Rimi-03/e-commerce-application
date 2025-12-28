@@ -71,7 +71,7 @@ class Product {
       rating: (data['rating'] ?? 0.0).toDouble(),
       reviewCount: data['reviewCount'] ?? 0,
       tags: List<String>.from(data['tags'] ?? []),
-      specifications: Map<String, dynamic>.from(data['specification'] ?? {}),
+      specifications: Map<String, dynamic>.from(data['specifications'] ?? {}),
       createdAt: data['createdAt']?.toDate(),
       updatedAt: data['updatedAt']?.toDate(),
     );
