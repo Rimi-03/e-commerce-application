@@ -199,6 +199,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ],
                     ],
                   ),
+
+                  if (widget.product.stock <= 5 && widget.product.stock > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        'Only ${widget.product.stock} left in stock!',
+                        style: AppTextStyle.withColor(
+                          AppTextStyle.bodySmall,
+                          Colors.orange,
+                        ),
+                      ),
+                    )
+                  else if (widget.product.stock == 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        'Out of Stock!',
+                        style: AppTextStyle.withColor(
+                          AppTextStyle.bodySmall,
+                          Colors.red,
+                        ),
+                      ),
+                    ),
                   SizedBox(height: screenHeight * 0.02),
                   Text(
                     'Select Size',
