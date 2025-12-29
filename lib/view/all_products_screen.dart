@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/utils/app_textstyles.dart';
+import 'package:ecommerce_app/view/search_results_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/view/filter_bottom_sheet.dart';
 import 'package:get/get.dart';
@@ -32,6 +33,7 @@ class AllProductsScreen extends StatelessWidget {
           IconButton(
             onPressed: () {
               // Implement search functionality
+              Get.to(()=> const SearchResultsScreen(searchQuery: ''));
             },
             icon: Icon(
               Icons.search,
