@@ -278,7 +278,7 @@ class WishlistController extends GetxController {
   }
 
   // Get products from wishlist
-  List<Product> getWishlistProducts() {
+  List<Product> get wishlistProducts {
     return _wishlistItems.map((item) => item.product).toList();
   }
 }

@@ -1,7 +1,10 @@
+import 'package:ecommerce_app/controllers/wishlist_controller.dart';
 import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/view/widgets/size_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+
 import '../utils/app_textstyles.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -94,13 +97,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Positioned(
                   right: screenWidth * 0.04,
                   top: screenWidth * 0.04,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.favorite_border,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: GetBuilder<WishlistController>(
+                      id: 'wishlist_${widget.product.id}',
+                      builder: (wishlistController) {
+                        final isInWishlist = wishlistController
+                            .isProductInWishlist(widget.product.id);
+
+                        return IconButton(
+                          icon: Icon(
+                            isInWishlist
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: isInWishlist
+                                ? Theme.of(context).primaryColor
+                                : (isDark ? Colors.white : Colors.black),
+                          ),
+                          onPressed: () {
+                            wishlistController.toggleWishlist(widget.product);
+                          },
+                        );
+                      }),
                 ),
               ],
             ),
