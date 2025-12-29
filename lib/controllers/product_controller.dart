@@ -206,7 +206,7 @@ class ProductController extends GetxController {
   }
 
   //Set price range filter
-void _setPriceRange(double min, double max){
+void setPriceRange(double min, double max){
     _minPrice.value = min;
     _maxPrice.value = max;
     _applyFilters();

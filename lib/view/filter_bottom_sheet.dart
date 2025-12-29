@@ -199,7 +199,7 @@ class FilterBottomSheet {
                       productController.filterByCategory(selectedCategory);
 
                       //Apply price filter
-                      productController.setPriceRange(minPrice, maxPrice);
+                      productController.setPriceRange(minPrice,maxPrice);
                       Get.back();
                     },
                     style: ElevatedButton.styleFrom(
