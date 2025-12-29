@@ -1,8 +1,8 @@
-import 'package:ecommerce_app/models/product.dart';
+import 'package:ecommerce_app/controllers/cart_controller.dart';
+import 'package:ecommerce_app/models/cart_item.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'checkout/screens/checkout_screen.dart';
 
 class CartScreen extends StatelessWidget {
@@ -29,24 +29,86 @@ class CartScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: products.length,
-              itemBuilder: (context, index) =>
-                  _buildCartItem(context, products[index]),
-            ),
-          ),
-          _buildCartSummary(context),
-        ],
+      body: GetBuilder<CartController>(
+        builder: (cartController) {
+          if (cartController.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (cartController.hasError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
+                  const SizedBox(height: 16),
+                  Text(
+                    cartController.errorMessage,
+                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => cartController.refreshCart(),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (cartController.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 64,
+                    color: Colors.grey[400],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Your cart is empty',
+                    style: AppTextStyle.withColor(
+                      AppTextStyle.h3,
+                      Colors.grey[600]!,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Add some products to your cart',
+                    style: AppTextStyle.withColor(
+                      AppTextStyle.bodyMedium,
+                      Colors.grey[500]!,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: cartController.cartItems.length,
+                  itemBuilder: (context, index) =>
+                      _buildCartItem(context, cartController.cartItems[index]),
+                ),
+              ),
+              _buildCartSummary(context, cartController),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildCartItem(BuildContext context, Product product) {
+  Widget _buildCartItem(BuildContext context, CartItem cartItem) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final product = cartItem.product;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -70,7 +132,7 @@ class CartScreen extends StatelessWidget {
             borderRadius: const BorderRadius.horizontal(
               left: Radius.circular(16),
             ),
-            child: Image.asset(
+            child: Image.network(
               product.imageUrl,
               width: 100,
               height: 100,
@@ -98,7 +160,7 @@ class CartScreen extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () =>
-                            _showDeleteConfirmationDialog(context, product),
+                            _showDeleteConfirmationDialog(context, cartItem),
                         icon: Icon(
                           Icons.delete_outline,
                           color: Colors.red[400],
@@ -110,13 +172,55 @@ class CartScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '\$${product.price}',
-                        style: AppTextStyle.withColor(
-                          AppTextStyle.bodyLarge,
-                          Theme.of(context).primaryColor,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '\$${product.price.toStringAsFixed(2)}',
+                            style: AppTextStyle.withColor(
+                              AppTextStyle.bodyLarge,
+                              Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          if (product.oldPrice != null &&
+                              product.oldPrice! > product.price) ...[
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
+                                Text(
+                                  '\$${product.oldPrice!.toStringAsFixed(2)}',
+                                  style:
+                                      AppTextStyle.withColor(
+                                        AppTextStyle.bodySmall,
+                                        Colors.grey[500]!,
+                                      ).copyWith(
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    '${product.discountPercentage} % OFF',
+                                    style: AppTextStyle.withColor(
+                                      AppTextStyle.bodySmall,
+                                      Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
                       ),
+
                       Container(
                         decoration: BoxDecoration(
                           color: Theme.of(
@@ -127,27 +231,39 @@ class CartScreen extends StatelessWidget {
                         child: Row(
                           children: [
                             IconButton(
-                              onPressed: () {},
                               icon: Icon(
                                 Icons.remove,
                                 size: 20,
-                                color: Theme.of(context).primaryColor,
+                                color: cartItem.quantity > 1
+                                    ? Theme.of(context).primaryColor
+                                    : Colors.grey,
                               ),
+                              onPressed: cartItem.quantity > 1
+                                  ? () => _updateQuantity(
+                                      cartItem,
+                                      cartItem.quantity - 1,
+                                    )
+                                  : null,
                             ),
                             Text(
-                              '1',
+                              '${cartItem.quantity}',
                               style: AppTextStyle.withColor(
                                 AppTextStyle.bodyLarge,
                                 Theme.of(context).primaryColor,
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
                               icon: Icon(
                                 Icons.add,
                                 size: 20,
                                 color: Theme.of(context).primaryColor,
                               ),
+                              onPressed: cartItem.quantity < product.stock
+                                  ? () => _updateQuantity(
+                                      cartItem,
+                                      cartItem.quantity + 1,
+                                    )
+                                  : null,
                             ),
                           ],
                         ),
@@ -163,7 +279,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context, Product product) {
+  void _showDeleteConfirmationDialog(BuildContext context, CartItem cartItem) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     Get.dialog(
@@ -197,7 +313,7 @@ class CartScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Are you sure you want to remove this item from your cart?',
+              'Are you sure you want to remove "${cartItem.product.name}" item from your cart?',
               textAlign: TextAlign.center,
               style: AppTextStyle.withColor(
                 AppTextStyle.bodyMedium,
@@ -231,7 +347,11 @@ class CartScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      final cartController = Get.find<CartController>();
+                      cartController.removeFromCart(cartItem.id);
+                      Get.back();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red[400],
                       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -257,7 +377,16 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCartSummary(BuildContext context) {
+  // Update cart item quantity
+  Future<void> _updateQuantity(CartItem cartItem, int newQuantity) async {
+    final cartController = Get.find<CartController>();
+    await cartController.updateQuantity(cartItem.id, newQuantity);
+  }
+
+  Widget _buildCartSummary(
+    BuildContext context,
+    CartController cartController,
+  ) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -278,14 +407,14 @@ class CartScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total(4 items)',
+                'Total(${cartController.itemCount} items)',
                 style: AppTextStyle.withColor(
                   AppTextStyle.bodyMedium,
                   Theme.of(context).textTheme.bodyLarge!.color!,
                 ),
               ),
               Text(
-                '\$599.99',
+                '\$${cartController.total.toStringAsFixed(2)}',
                 style: AppTextStyle.withColor(
                   AppTextStyle.h2,
                   Theme.of(context).primaryColor,

@@ -1,7 +1,6 @@
 import 'package:ecommerce_app/models/category.dart';
 import 'package:ecommerce_app/services/category_firestore_service.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class CategoryController extends GetxController {
   final RxList<Category> _categories = <Category>[].obs;

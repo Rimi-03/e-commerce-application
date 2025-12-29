@@ -1,10 +1,11 @@
+import 'package:ecommerce_app/controllers/cart_controller.dart';
 import 'package:ecommerce_app/controllers/wishlist_controller.dart';
 import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class WishlistScreen extends StatelessWidget{
+class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
 
   @override
@@ -33,12 +34,10 @@ class WishlistScreen extends StatelessWidget{
       ),
       body: GetBuilder<WishlistController>(
         builder: (wishlistController) {
-          if(wishlistController.isLoading){
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          if (wishlistController.isLoading) {
+            return const Center(child: CircularProgressIndicator());
           }
-          
+
           if (wishlistController.hasError) {
             return Center(
               child: Column(
@@ -52,14 +51,14 @@ class WishlistScreen extends StatelessWidget{
                   const SizedBox(height: 16),
                   Text(
                     wishlistController.errorMessage,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton(onPressed: () => wishlistController.refreshWishlist(), child: const Text('Retry'),),
+                  ElevatedButton(
+                    onPressed: () => wishlistController.refreshWishlist(),
+                    child: const Text('Retry'),
+                  ),
                 ],
               ),
             );
@@ -78,18 +77,24 @@ class WishlistScreen extends StatelessWidget{
                   const SizedBox(height: 16),
                   Text(
                     'Your wishlist is empty',
-                    style: AppTextStyle.withColor(AppTextStyle.h3, Colors.grey[500]!),
+                    style: AppTextStyle.withColor(
+                      AppTextStyle.h3,
+                      Colors.grey[500]!,
+                    ),
                   ),
                 ],
               ),
             );
           }
-          
+
           return CustomScrollView(
             slivers: [
               // Summary Section
               SliverToBoxAdapter(
-                child: _buildSummarySection(context, wishlistController.itemCount),
+                child: _buildSummarySection(
+                  context,
+                  wishlistController.itemCount,
+                ),
               ), // SliverToBoxAdapter
               // Wishlist Items
               SliverPadding(
@@ -106,7 +111,7 @@ class WishlistScreen extends StatelessWidget{
               ),
             ],
           );
-        }
+        },
       ),
     );
   }
@@ -229,14 +234,15 @@ class WishlistScreen extends StatelessWidget{
                       Row(
                         children: [
                           IconButton(
-                            onPressed: () => _showDeleteConfirmationDialog(context, product),
+                            onPressed: () => _addToCartFromWishlist(product),
                             icon: Icon(
                               Icons.shopping_cart_outlined,
                               color: Theme.of(context).primaryColor,
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () =>
+                                _showDeleteConfirmationDialog(context, product),
                             icon: Icon(
                               Icons.delete_outline,
                               color: isDark
@@ -257,6 +263,104 @@ class WishlistScreen extends StatelessWidget{
     );
   }
 
+  //Add to cart from wishlist
+  Future<void> _addToCartFromWishlist(Product product) async {
+    final cartController = Get.find<CartController>();
+
+    //Check if product has sizes and requires selection
+    if (product.specifications.containsKey('sizes')) {
+      final sizes = product.specifications['sizes'];
+      if (sizes is List && sizes.isNotEmpty) {
+        //show size selection dialog
+        _showSizeSelectionDialog(product, cartController);
+      }
+    }
+
+    //Add to cart without size selection
+    await cartController.addToCart(product: product, quantity: 1);
+  }
+
+  //show size selection dialog for adding to cart
+  void _showSizeSelectionDialog(
+    Product product,
+    CartController cartController,
+  ) {
+    final isDark = Theme.of(Get.context!).brightness == Brightness.dark;
+    final sizes = List<String>.from(product.specifications['sizes'] ?? []);
+
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).cardColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            'Select Size',
+            style: AppTextStyle.withColor(
+              AppTextStyle.h3,
+              Theme.of(context).textTheme.headlineMedium!.color!,
+            ),
+          ),
+
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Choose a size for "${product.name}"',
+                style: AppTextStyle.withColor(
+                  AppTextStyle.bodyMedium,
+                  Theme.of(context).textTheme.bodyMedium!.color!,
+                ),
+              ),
+
+              const SizedBox(height: 16,),
+              Wrap(
+                spacing: 0,
+                children: sizes.map((size){
+                  return ElevatedButton(
+                    onPressed: () async {
+                      Get.back();
+                      await cartController.addToCart(
+                        product: product,
+                        quantity: 1,
+                        selectedSize: size,
+                      );
+                    }, 
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      size,
+                      style: AppTextStyle.withColor(
+                        AppTextStyle.buttonMedium, 
+                        Colors.white,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(), 
+              child: Text(
+                'Cancel',
+                style: AppTextStyle.withColor(AppTextStyle.buttonMedium, 
+                      isDark ? Colors.grey[400]! : Colors.grey[600]!),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // show delete confirmation dialog
   void _showDeleteConfirmationDialog(BuildContext context, Product product) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -271,11 +375,17 @@ class WishlistScreen extends StatelessWidget{
           ),
           title: Text(
             'Remove from wishlist',
-            style: AppTextStyle.withColor(AppTextStyle.h3, Theme.of(context).textTheme.headlineMedium!.color!,),
+            style: AppTextStyle.withColor(
+              AppTextStyle.h3,
+              Theme.of(context).textTheme.headlineMedium!.color!,
+            ),
           ),
           content: Text(
             'Are you sure you want to remove "${product.name}" from your wishlist?',
-            style: AppTextStyle.withColor(AppTextStyle.bodyMedium, Theme.of(context).textTheme.bodyMedium!.color!,),
+            style: AppTextStyle.withColor(
+              AppTextStyle.bodyMedium,
+              Theme.of(context).textTheme.bodyMedium!.color!,
+            ),
           ),
           actions: [
             TextButton(
