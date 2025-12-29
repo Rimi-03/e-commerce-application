@@ -1,7 +1,8 @@
+import 'package:ecommerce_app/controllers/wishlist_controller.dart';
 import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 class ProductCard extends StatelessWidget{
   final Product product;
@@ -84,27 +85,24 @@ class ProductCard extends StatelessWidget{
               ),
               if (product.oldPrice != null)
                 Positioned(
-                  left: 8,
-                  top: 8,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    //discount text
-                    child: Text(
-                      '${calculateDiscount(product.price, product.oldPrice!)}% OFF',
-                      style: AppTextStyle.withColor(AppTextStyle.withWeight(
-                            AppTextStyle.bodySmall
-                            , FontWeight.bold), Colors.white,
-                            ),
-                    ),
-                  ),
-                ),
+                right: 8,
+                top: 8,
+                child: GetBuilder<WishlistController>(
+                  id: 'wishlist_button_${product.id}',
+                  builder: (wishlistController) {
+                    final isInWishlist = wishlistController.isProductInWishlist(product.id);
+
+                    return IconButton(
+                      icon: Icon(
+                        isInWishlist ? Icons.favorite : Icons.favorite_border,
+                        color: isInWishlist ? Theme.of(context).primaryColor : isDark ? Colors.grey[400] : Colors.grey,
+                      ),
+                      onPressed: () {
+                        wishlistController.toggleWishlist(product);
+                      },
+                    );
+                  }),
+              ),
             ],
           ),
           //product details
