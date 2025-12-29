@@ -10,7 +10,7 @@ class FirestoreService {
     required String uid,
     required String email,
     required String name,
-  }) async {g
+  }) async {
     try {
       final userData = {
         'uid': uid,
