@@ -205,7 +205,7 @@ lib/
 1. **Clone the repository**:
 ```bash
 git clone https://github.com/Rimi-03/e-commerce-application
-cd fashion-store
+cd e-commerce-application
 ```
 
 2. **Install dependencies**:
