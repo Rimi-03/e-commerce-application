@@ -32,9 +32,12 @@ class CartItem {
     return CartItem(
       id: id, 
       userId: data['userId'] ?? '', 
-      productId: data['productId'] ?? '', 
-      product: Product.fromFirestore(Map<String, dynamic>.from(data['product'] ?? {}) , data['productId'] ?? ''), 
-      quantity: data['quantity'] ?? 1, 
+      productId: data['productId'] ?? '',
+      product: Product.fromFirestore(
+          Map<String, dynamic>.from(data['product'] ?? {}),
+          data['productId'] ?? ''
+      ),
+      quantity: data['quantity'] ?? 1,
       addedAt: data['addedAt']?.toDate() ?? DateTime.now(), 
       updatedAt: data['updatedAt'].toDate() ?? DateTime.now(),
       selectedSize: data['selectedSize'],
@@ -48,7 +51,7 @@ class CartItem {
     return{
       'userId' : userId,
       'productId' : productId,
-      'product' : product,
+      'product' : product.toFirestore(),
       'quantity' : quantity,
       'selectedSize' : selectedSize,
       'selectedColor' : selectedColor,
