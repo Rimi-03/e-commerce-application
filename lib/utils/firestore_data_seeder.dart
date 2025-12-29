@@ -107,6 +107,26 @@ class FirestoreDataSeeder {
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
+      {
+        'name': 'Beauty',
+        'displayName': 'Beauty & Care',
+        'description': 'Skincare, grooming, and personal care products',
+        'isActive': true,
+        'sortOrder': 7,
+        'subCategories': [
+          'Skincare',
+          'Haircare',
+          'Fragrances',
+          'Makeup',
+          'Grooming',
+        ],
+        'metadata': {
+          'color': '#00BCD4',
+          'icon': 'face_retouching_natural'
+        },
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      },
     ];
 
     try {
@@ -115,7 +135,7 @@ class FirestoreDataSeeder {
           .collection('categories')
           .limit(1)
           .get();
-      if (existingCategories.docs.isNotEmpty) {
+      if (existingCategories.docs.isEmpty) {
         for (var category in sampleCategories) {
           await _firestore.collection('categories').add(category);
         }
