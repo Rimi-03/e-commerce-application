@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/controllers/product_controller.dart';
 import 'package:ecommerce_app/utils/app_textstyles.dart';
+import 'package:ecommerce_app/view/search_results_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -51,9 +52,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                       onPressed: () {
                         _searchController.clear();
                         productController.clearSearch();
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                       icon: Icon(
                         Icons.clear,
@@ -87,25 +86,27 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             ),
           ),
         ),
-        onChanged: (value){
+        onChanged: (value) {
           setState(() {
             //show/hide clear button
           });
         },
         onSubmitted: _performSearch,
-        onTap: (){
+        onTap: () {
           //navigate to screen
+          Get.to(() => SearchResultsScreen(searchQuery: _searchController.text));
         },
       ),
     );
   }
 
-  void _performSearch(String query){
-    if(query.trim().isEmpty) return;
+  void _performSearch(String query) {
+    if (query.trim().isEmpty) return;
 
     final productController = Get.find<ProductController>();
     productController.searchProducts(query.trim());
 
     //Navigate to search result screen
+    Get.to(() => SearchResultsScreen(searchQuery: query.trim()));
   }
 }
