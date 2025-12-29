@@ -57,6 +57,7 @@ class FilterBottomSheet {
                 ),
 
                 const SizedBox(height: 24),
+
                 /// Price Range
                 Text(
                   'Price Range',
@@ -143,7 +144,19 @@ class FilterBottomSheet {
                       children: categories
                           .map(
                             (category) => FilterChip(
-                              label: Text(category),
+                              label: Text(
+                                category,
+                                style: AppTextStyle.bodyMedium.copyWith(
+                                  color: selectedCategory == ''
+                                      ? Colors.white
+                                      : Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge!.color,
+                                  fontWeight: selectedCategory == ''
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
+                                ),
+                              ),
                               selected: category == selectedCategory,
                               onSelected: (selected) {
                                 // Handle category selection
@@ -199,7 +212,7 @@ class FilterBottomSheet {
                       productController.filterByCategory(selectedCategory);
 
                       //Apply price filter
-                      productController.setPriceRange(minPrice,maxPrice);
+                      productController.setPriceRange(minPrice, maxPrice);
                       Get.back();
                     },
                     style: ElevatedButton.styleFrom(
