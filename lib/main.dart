@@ -1,8 +1,10 @@
 import 'package:ecommerce_app/controllers/auth_controller.dart';
+import 'package:ecommerce_app/controllers/cart_controller.dart';
 import 'package:ecommerce_app/controllers/category_controller.dart';
 import 'package:ecommerce_app/controllers/navigation_controller.dart';
 import 'package:ecommerce_app/controllers/product_controller.dart';
 import 'package:ecommerce_app/controllers/theme_controller.dart';
+import 'package:ecommerce_app/controllers/wishlist_controller.dart';
 import 'package:ecommerce_app/firebase_options.dart';
 import 'package:ecommerce_app/utils/app_themes.dart';
 import 'package:ecommerce_app/utils/firestore_data_seeder.dart';
@@ -23,6 +25,8 @@ void main() async{
   Get.put(ProductController());
   Get.put(NavigationController());
   Get.put(CategoryController());
+  Get.put(WishlistController());
+  Get.put(CartController());
 
   //the line below is used to seed data sample to firestore(for testing only)
   await FirestoreDataSeeder.seedAllData();

@@ -1,6 +1,9 @@
+import 'package:ecommerce_app/controllers/cart_controller.dart';
+import 'package:ecommerce_app/controllers/wishlist_controller.dart';
 import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/view/widgets/size_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import '../utils/app_textstyles.dart';
 
@@ -13,6 +16,19 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  String? selectedSize;
+
+
+  @override
+  void initState(){
+    super.initState();
+    //initialize with first available size if product has sizes
+    final availableSizes = _getAvailableSizes();
+    if(availableSizes.isNotEmpty){
+      selectedSize = availableSizes.first;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -94,13 +110,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Positioned(
                   right: screenWidth * 0.04,
                   top: screenWidth * 0.04,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.favorite_border,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: GetBuilder<WishlistController>(
+                      id: 'wishlist_${widget.product.id}',
+                      builder: (wishlistController) {
+                        final isInWishlist = wishlistController
+                            .isProductInWishlist(widget.product.id);
+
+                        return IconButton(
+                          icon: Icon(
+                            isInWishlist
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: isInWishlist
+                                ? Theme.of(context).primaryColor
+                                : (isDark ? Colors.white : Colors.black),
+                          ),
+                          onPressed: () {
+                            wishlistController.toggleWishlist(widget.product);
+                          },
+                        );
+                      }),
                 ),
               ],
             ),
@@ -236,7 +265,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     SizeSelector(
                       sizes: _getAvailableSizes(),
                       onSizeSelected: (size) {
-                        //handle size selection logic
+                        setState(() {
+                          selectedSize = size;
+                        });
                       }),
                     SizedBox(height: screenHeight * 0.02),
                   ],
@@ -270,23 +301,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           child: Row(
             children: [
               Expanded(
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      vertical: screenHeight * 0.02,
-                    ),
-                    side: BorderSide(
-                      color: isDark ? Colors.white70 : Colors.black12,
-                    ),
-                  ),
-                  child: Text(
-                    'Add To Cart',
-                    style: AppTextStyle.withColor(
-                      AppTextStyle.buttonMedium,
-                      Theme.of(context).textTheme.bodyLarge!.color!,
-                    ),
-                  ),
+                child: GetBuilder<CartController>(
+                  builder: (cartController) {
+                    final isInCart = cartController.isProductInCart(
+                      widget.product.id,
+                      selectedSize: selectedSize,
+                    );
+                    return OutlinedButton(
+                      onPressed: widget.product.stock > 0 ? ()=> _addToCart(cartController) : null,
+                      style: OutlinedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                          vertical: screenHeight * 0.02,
+                        ),
+                        side: BorderSide(
+                          color: isDark ? Colors.white70 : Colors.black12,
+                        ),
+                      ),
+                      child: Text(
+                        widget.product.stock > 0 ? (isInCart ? 'Update Cart' : 'Add To Cart') : 'Out of Stock',
+                        style: AppTextStyle.withColor(
+                          AppTextStyle.buttonMedium,
+                          Theme.of(context).textTheme.bodyLarge!.color!,
+                        ),
+                      ),
+                    );
+                  }
                 ),
               ),
               SizedBox(width: screenWidth * 0.04),
@@ -315,6 +354,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
+  //Add product to cart
+  Future<void> _addToCart(CartController cartController) async{
+    //Check if size selection is required
+    final availableSizes = _getAvailableSizes();
+    if(availableSizes.isNotEmpty && selectedSize == null){
+      Get.snackbar(
+        'Size Required', 
+        'Please select a size before adding to cart',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    //add to cart with selected options
+    await cartController.addToCart(
+      product: widget.product,
+      quantity: 1,
+      selectedSize: selectedSize,
+    );
+  }
+
+  //Get available sizes from product specification
   List<String> _getAvailableSizes() {
     if (widget.product.specifications.containsKey('sizes')) {
       final sizes = widget.product.specifications['sizes'];
