@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/controllers/auth_controller.dart';
+import 'package:ecommerce_app/controllers/cart_controller.dart';
 import 'package:ecommerce_app/controllers/category_controller.dart';
 import 'package:ecommerce_app/controllers/navigation_controller.dart';
 import 'package:ecommerce_app/controllers/product_controller.dart';
@@ -25,6 +26,7 @@ void main() async{
   Get.put(NavigationController());
   Get.put(CategoryController());
   Get.put(WishlistController());
+  Get.put(CartController());
 
   //the line below is used to seed data sample to firestore(for testing only)
   await FirestoreDataSeeder.seedAllData();
